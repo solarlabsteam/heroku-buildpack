@@ -41,8 +41,3 @@ fi
 echo "-----> Installing ${project}"
 cd $build
 make $project
-
-cat Makefile
-ls
-
-exit 1
