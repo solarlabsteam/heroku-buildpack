@@ -7,12 +7,9 @@ cache=$(cd "$2/" && pwd)
 env_dir="${3}"
 buildpack=$(cd "$(dirname $0)/.." && pwd)
 
-goVersion=$(cat $env_dir/GO_VERSION)
+goVersion=$(cat $env_dir/GOVERSION)
 project=$(cat $env_dir/PROJECT)
 goPath="${cache}/${goVersion}/go"
-
-echo "Env vars:"
-ls $env_dir
 
 if [ -d "${goPath}" ]; then
     echo "-----> Using ${goVersion}"
