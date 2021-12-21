@@ -1,0 +1,41 @@
+#!/bin/bash
+
+
+mkdir -p "$1" "$2"
+build=$(cd "$1/" && pwd)
+cache=$(cd "$2/" && pwd)
+env_dir="${3}"
+buildpack=$(cd "$(dirname $0)/.." && pwd)
+
+local goPath="${cache}/${GO_VERSION}/go"
+
+if [ -d "${goPath}" ]; then
+    echo "-----> Using ${GO_VERSION}"
+else
+    #For a go version change, we delete everything
+    echo "-----> New Go Version, clearing old cache"
+    if [ -d "${cache}/go-path" ]; then
+        find "${cache}/go-path" ! -perm -u=w -print0 | xargs -r -0 chmod u+w 2>&1
+    fi
+    rm -rf ${cache}/*
+
+    local goFile="go${GO_VERSION}.linux-amd64.tar.gz"
+
+    echo "-----> Installing ${GO_VERSION}"
+    wget "https://go.dev/dl/$goFile"
+    tar -C ${goPath} --strip-components=1 -zxf $goFile
+    rm -f "${goPath}/${goFile}"
+fi
+
+export GOROOT="${goPath}"
+PATH="${goPath}/bin:${PATH}"
+
+# Export GOCACHE if Go >= 1.10
+if go env | grep -q '^GOCACHE='; then
+    export GOCACHE="${cache}/go-build-cache"
+fi
+
+echo "-----> Installing ${PROJECT}"
+make $PROJECT
+
+exit 1
