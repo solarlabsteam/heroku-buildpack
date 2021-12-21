@@ -39,6 +39,7 @@ if go env | grep -q '^GOCACHE='; then
 fi
 
 echo "-----> Installing ${project}"
+cd $build
 make $project
 
 cat Makefile
