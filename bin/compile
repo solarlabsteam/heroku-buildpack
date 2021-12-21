@@ -25,6 +25,7 @@ else
 
     echo "-----> Installing ${goVersion}"
     wget "https://go.dev/dl/$goFile"
+    mkdir -p ${goPath}
     tar -C ${goPath} --strip-components=1 -zxf $goFile
     rm -f "${goPath}/${goFile}"
 fi
