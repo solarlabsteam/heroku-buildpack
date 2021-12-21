@@ -11,6 +11,9 @@ goVersion=$(cat $env_dir/GO_VERSION)
 project=$(cat $env_dir/PROJECT)
 goPath="${cache}/${goVersion}/go"
 
+echo "Env vars:"
+ls $env_dir
+
 if [ -d "${goPath}" ]; then
     echo "-----> Using ${goVersion}"
 else
